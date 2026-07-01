@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance OS — Login</title>
+    <style>
+        :root {
+            --bg-color: #fcfcfc;
+            --card-bg: #ffffff;
+            --accent-pink: #fbe4e4;
+            --text-main: #37352f;
+            --text-muted: #7c7a74;
+            --border-color: #e9e9e6;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .auth-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+        .otter-img {
+            height: 80px;
+            margin-bottom: 16px;
+        }
+        h2 { margin: 0 0 8px 0; font-size: 24px; }
+        p { color: var(--text-muted); font-size: 14px; margin: 0 0 24px 0; }
+        form { display: flex; flex-direction: column; gap: 16px; text-align: left; }
+        input {
+            width: 92%; padding: 10px 12px; border: 1px solid var(--border-color);
+            border-radius: 6px; font-size: 14px; outline: none;
+        }
+        button {
+            background: var(--text-main); color: #fff; border: none;
+            border-radius: 6px; padding: 10px; font-size: 14px; font-weight: 500;
+            cursor: pointer; margin-top: 10px;
+        }
+        .switch-link { font-size: 13px; color: var(--text-muted); margin-top: 20px; }
+        .switch-link a { color: var(--text-main); text-decoration: none; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <img src="{% static 'otter.png' %}" class="otter-img" alt="Otter">
+        <h2>Welcome Back</h2>
+        <p>Log into your Finance OS ledger</p>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                <label style="font-size: 12px; color: var(--text-muted); display:block; margin-bottom:4px;">Username</label>
+                <input type="text" name="username" required>
+            </div>
+            <div>
+                <label style="font-size: 12px; color: var(--text-muted); display:block; margin-bottom:4px;">Password</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit">Sign In</button>
+        </form>
+
+        <div class="switch-link">
+            Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+        </div>
+    </div>
+
+</body>
+</html>
