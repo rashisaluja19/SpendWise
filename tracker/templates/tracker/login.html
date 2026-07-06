@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance OS — Login</title>
+    <title>SpendWise — Login</title>
     <style>
         :root {
             --bg-color: #fcfcfc;
@@ -59,7 +59,7 @@
     <div class="auth-card">
         <img src="{% static 'otter.png' %}" class="otter-img" alt="Otter">
         <h2>Welcome Back</h2>
-        <p>Log into your Finance OS ledger</p>
+        <p>Log into your SpendWise account</p>
         
         <form method="POST">
             {% csrf_token %}
@@ -78,10 +78,11 @@
             Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
         </div>
         <!-- 🏷️ Original Copyright Footer Component Integrated Safely -->
-        <div class="footer-copyright row border-top border-2 border-dark p-4 mt-5 text-center">
-            <h4>Designed and Developed By <b>Rashi Saluja</b> | &copy; all rights reserved</h4>
+        <div class="footer-copyright row border-top border-2 border-dark p-3 mt-5 text-center">
+            <p class="small text-muted text-nowrap m-0">
+                Designed and Developed By <strong class="text-dark">Rashi Saluja</strong> | &copy; all rights reserved
+            </p>
         </div>
-
     </div>
 
 </body>
