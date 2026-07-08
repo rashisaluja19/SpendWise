@@ -1,0 +1,121 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+<div class="container">
+    
+    <div class="row mb-4 align-items-center bg-white p-3 border rounded-3 shadow-sm mx-0" style="background: linear-gradient(to right, #ffffff, #ffe3e3);">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center mb-2">
+                <span class="fs-1 me-2">🏠</span>
+                <h1 class="fw-bold mb-0" style="color: #37352f;">SpendWise</h1>
+            </div>
+            <p class="text-muted fs-5 mb-0">Welcome back, <strong>{{ user.username }}</strong></p>
+        </div>
+        <div class="col-md-4 text-end d-none d-md-block">
+            <img src="/static/otter.png" alt="Cute Banner" class="img-fluid" style="max-height: 120px; border-radius: 10px;">
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border rounded-3 my-3 px-3 shadow-sm">
+        <div class="container-fluid px-0">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="dashboardMenu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link text-muted px-3 py-1" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-bold bg-light rounded text-primary px-3 py-1" href="{% url 'expense_list' %}">All Expenses</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center small">
+                    <strong><span class="text-muted me-3">{{ user.username }}</span></strong>
+                    <button id="themeToggle" class="btn btn-sm btn-outline-danger me-2 py-0 px-2" style="font-size: 0.85rem;">Mode</button>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size: 0.85rem;">Sign Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <h5 class="fw-bold mb-3 text-secondary" style="font-size: 1.1rem;">Your Transaction History</h5>
+
+    <!-- 🎛️ 3. FILTER BAR COMPONENT (Compact Professional Scale) -->
+    <form method="GET" action="{% url 'expense_list' %}" class="row g-2 mb-4 bg-white p-3 border rounded-3 shadow-sm align-items-end mx-0">
+        <!-- Category Filter -->
+        <div class="col-md-4">
+            <label class="form-label fw-semibold text-muted small mb-1">Filter by Category</label>
+            <select name="category" class="form-select form-select-sm" style="font-size: 0.85rem;">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Date Range Filter -->
+        <div class="col-md-4">
+            <label class="form-label fw-semibold text-muted small mb-1">Date Range</label>
+            <select name="date_range" class="form-select form-select-sm" style="font-size: 0.85rem;">
+                <option value="">All Time</option>
+                <option value="this_week" {% if selected_date == 'this_week' %}selected{% endif %}>This Week</option>
+                <option value="this_month" {% if selected_date == 'this_month' %}selected{% endif %}>This Month</option>
+            </select>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="col-md-4 d-flex gap-2">
+            <button type="submit" class="btn btn-dark btn-sm w-100 fw-semibold" style="font-size: 0.85rem;">Apply Filters</button>
+            <a href="{% url 'expense_list' %}" class="btn btn-outline-dark btn-sm w-100 fw-semibold" style="font-size: 0.85rem;">Reset</a>
+        </div>
+    </form>
+
+    <!-- 📑 4. RECORD EXPENSES GRID & TABLE -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold text-dark mb-0">Your Expenses</h6>
+        <!-- Export Premium Action Button -->
+        <a href="{% url 'export_expenses_csv' %}" class="btn btn-dark btn-sm d-flex align-items-center gap-1 shadow-sm px-3 py-1" style="font-size: 0.85rem;">
+            Export to Sheets
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-hover align-middle mb-0" style="font-size: 0.9rem;">
+                    <thead class="table-light sticky-top">
+                        <tr>
+                            <th class="ps-3 text-muted fw-semibold py-2">Date</th>
+                            <th class="text-muted fw-semibold py-2">Description</th>
+                            <th class="text-muted fw-semibold py-2">Category</th>
+                            <th class="text-end pe-3 text-muted fw-semibold py-2">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expense in expenses %}
+                        <tr>
+                            <td class="ps-3 text-muted small">{{ expense.date }}</td>
+                            <td class="fw-semibold text-dark">{{ expense.title }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 0.75rem;">
+                                    {{ expense.category }}
+                                </span>
+                            </td>
+                            <td class="text-end pe-3 fw-bold text-danger">- ₹{{ expense.amount }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted small">No expense tracked yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<footer class="text-center py-4 mt-5 border-top text-muted small">
+        Designed and Developed By <b>Rashi Saluja</b> | &copy; all right reserved
+    </footer>
+</div>
+{% endblock %}
